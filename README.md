@@ -1,10 +1,12 @@
-# Déploiement GLPI Agent — v1.0.0
+# Déploiement GLPI Agent — v1.0.1
 
 Cette publication contient un lanceur Windows et les scripts d’installation Windows, macOS et Linux pour **GLPI Agent 1.21**. **Aucune clé ni configuration client n’est intégrée aux fichiers publics.** Le serveur et le tag sont fournis lors de l’exécution ou par un lanceur client remis en privé.
 
 ## Windows : téléchargement automatique
 
-Windows x64, PowerShell 5.1 ou supérieur **64 bits**, en **administrateur** ou **SYSTEM**. Windows x86 et ARM64 ne sont pas pris en charge. Internet doit autoriser GitHub et le serveur GLPI.
+Windows x64, **Windows PowerShell 4.0 ou 5.1**, en **64 bits**, en **administrateur** ou **SYSTEM**. Windows x86 et ARM64 ne sont pas pris en charge. Internet doit autoriser GitHub et le serveur GLPI.
+
+Cette version utilise une syntaxe compatible PowerShell 4.0 et 5.1. Aucune mise à jour de PowerShell ou de .NET n’est effectuée par les scripts. Le contrôle SHA256, TLS 1.2 et les protections des identifiants restent actifs.
 
 1. Télécharger `install_from_github.ps1` dans les fichiers de cette release.
 2. Lancer PowerShell administrateur. Remplacer les exemples ci-dessous par le tag et l’URL du client.
@@ -28,7 +30,7 @@ Pour installer :
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File $lanceur -Tag CLIENT -ServerUrl "https://glpi.example.org/plugins/glpiinventory/"
 ```
 
-Le lanceur télécharge **la version v1.0.0**, vérifie son SHA256 intégré puis exécute le script d’installation. Le paquet MSI officiel GLPI est lui aussi téléchargé depuis GitHub et vérifié par SHA256 avant le retrait des anciens agents.
+Le lanceur télécharge **la version v1.0.1**, vérifie son SHA256 intégré puis exécute le script d’installation. Le paquet MSI officiel GLPI est lui aussi téléchargé depuis GitHub et vérifié par SHA256 avant le retrait des anciens agents.
 
 En PowerShell interactif, le Client ID puis le Client Secret GLPI sont demandés si aucune clé n’est fournie ; le secret est saisi de façon masquée. Avec un lanceur client privé contenant sa clé dédiée, aucune saisie n’est requise. Les secrets ne sont pas passés dans les arguments de l’installateur.
 
@@ -43,7 +45,7 @@ L’option `-ExecutionPolicy Bypass` s’applique uniquement au processus lancé
 
 ## macOS et Linux
 
-Les scripts sont disponibles individuellement et dans `glpi-agent-deployment-v1.0.0-sans-cles.zip`. Utiliser `--check-only` pour valider les paramètres avant installation.
+Les scripts sont disponibles individuellement et dans `glpi-agent-deployment-v1.0.1-sans-cles.zip`. Utiliser `--check-only` pour valider les paramètres avant installation.
 
 macOS prend en charge Intel et Apple Silicon avec l’installation PKG officielle. Linux prend en charge Debian/Ubuntu ou RPM avec systemd. Les installations Homebrew, Snap, AppImage, CPAN ou personnalisées nécessitent une migration spécifique.
 
@@ -61,4 +63,4 @@ Syntaxe et simulations de remplacement contrôlées ; aucun déploiement réel d
 
 `SHA256SUMS.txt` contient les empreintes des scripts, de la notice et de l’archive. Le lanceur contient l’empreinte attendue du script Windows qu’il exécute. Il utilise une release précise et ne suit pas automatiquement `latest`.
 
-[Téléchargements de cette version](https://github.com/axyrios/glpi-agent-deployment-releases/releases/tag/v1.0.0). Les lanceurs avec clés sont remis séparément par un canal privé et ne doivent pas être publiés ici.
+[Téléchargements de cette version](https://github.com/axyrios/glpi-agent-deployment-releases/releases/tag/v1.0.1). Les lanceurs avec clés sont remis séparément par un canal privé et ne doivent pas être publiés ici.
