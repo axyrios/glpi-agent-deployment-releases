@@ -1,8 +1,10 @@
-# Déploiement GLPI Agent — v1.0.2
+# Déploiement GLPI Agent — v1.0.3
 
 Cette publication contient un lanceur Windows et les scripts d’installation Windows, macOS et Linux pour **GLPI Agent 1.21**. **Aucune clé ni configuration client n’est intégrée aux fichiers publics.** Le serveur et le tag sont fournis lors de l’exécution ou par un lanceur client remis en privé.
 
-**Correction v1.0.2 :** les messages informatifs de l’agent sur la sortie d’erreur native n’interrompent plus l’inventaire sous Windows PowerShell. Le script contrôle ensuite le code de sortie réel et refuse toujours les erreurs de transfert ou d’authentification. Les sauvegardes, TLS et SHA256 restent actifs.
+**Correction v1.0.3 :** tous les modules disponibles de l’agent sont installés et autorisés : inventaire, déploiement de paquets, collecte, découverte et inventaire réseau, ESX et inventaire distant. Windows utilise `ADDLOCAL=ALL`, Linux `--type=all`, macOS le PKG officiel complet. La configuration `Inventory,...` laisse toutes les tâches disponibles au service. Une vérification locale refuse une installation dont un module requis manque.
+
+**Correction conservée de v1.0.2 :** les messages informatifs de l’agent sur la sortie d’erreur native n’interrompent plus l’inventaire sous Windows PowerShell. Le script contrôle ensuite le code de sortie réel et refuse toujours les erreurs de transfert ou d’authentification. Les sauvegardes, TLS et SHA256 restent actifs.
 
 ## Windows : téléchargement automatique
 
@@ -32,7 +34,7 @@ Pour installer :
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File $lanceur -Tag CLIENT -ServerUrl "https://glpi.example.org/plugins/glpiinventory/"
 ```
 
-Le lanceur télécharge **la version v1.0.2**, vérifie son SHA256 intégré puis exécute le script d’installation. Le paquet MSI officiel GLPI est lui aussi téléchargé depuis GitHub et vérifié par SHA256 avant le retrait des anciens agents.
+Le lanceur télécharge **la version v1.0.3**, vérifie son SHA256 intégré puis exécute le script d’installation. Le paquet MSI officiel GLPI est lui aussi téléchargé depuis GitHub et vérifié par SHA256 avant le retrait des anciens agents.
 
 En PowerShell interactif, le Client ID puis le Client Secret GLPI sont demandés si aucune clé n’est fournie ; le secret est saisi de façon masquée. Avec un lanceur client privé contenant sa clé dédiée, aucune saisie n’est requise. Les secrets ne sont pas passés dans les arguments de l’installateur.
 
@@ -47,9 +49,17 @@ L’option `-ExecutionPolicy Bypass` s’applique uniquement au processus lancé
 
 ## macOS et Linux
 
-Les scripts sont disponibles individuellement et dans `glpi-agent-deployment-v1.0.2-sans-cles.zip`. Utiliser `--check-only` pour valider les paramètres avant installation.
+Les scripts sont disponibles individuellement et dans `glpi-agent-deployment-v1.0.3-sans-cles.zip`. Utiliser `--check-only` pour valider les paramètres avant installation.
 
 macOS prend en charge Intel et Apple Silicon avec l’installation PKG officielle. Linux prend en charge Debian/Ubuntu ou RPM avec systemd. Les installations Homebrew, Snap, AppImage, CPAN ou personnalisées nécessitent une migration spécifique.
+
+## Correction des installations limitées à l’inventaire
+
+Télécharger le **nouveau** lanceur de cette publication : les anciens lanceurs restent liés à leur ancienne release et ne changent pas automatiquement. Relancer la nouvelle version en administrateur/SYSTEM sur les agents déjà en 1.21 ajoute les modules manquants sous Windows ; macOS et Linux réinstallent le paquet complet après sauvegarde. Les identifiants doivent être fournis par les mêmes champs sécurisés ou le lanceur privé.
+
+Le contrôle immédiat force seulement un inventaire. Ensuite, les autres tâches sont exécutées selon la configuration et les tâches planifiées dans GLPI Inventory. Le serveur HTTP local reste désactivé : les agents interrogent GLPI périodiquement, sans réveil immédiat par le port 62354 ni ouverture du pare-feu. WakeOnLan n’est pas une tâche supportée de l’agent Windows 1.21.
+
+Contrôler dans la fiche de l’agent GLPI les **Tâches supportées**, en particulier « Déploiement de paquets ». La présence des modules ne certifie pas une installation de paquet réussie : effectuer ensuite un pilote de déploiement. Aucun poste existant n’a été corrigé pendant la publication.
 
 ## Remplacement et contrôle du pilote
 
@@ -65,4 +75,4 @@ Syntaxe et simulations de remplacement contrôlées ; aucun déploiement réel d
 
 `SHA256SUMS.txt` contient les empreintes des scripts, de la notice et de l’archive. Le lanceur contient l’empreinte attendue du script Windows qu’il exécute. Il utilise une release précise et ne suit pas automatiquement `latest`.
 
-[Téléchargements de cette version](https://github.com/axyrios/glpi-agent-deployment-releases/releases/tag/v1.0.2). Les lanceurs avec clés sont remis séparément par un canal privé et ne doivent pas être publiés ici.
+[Téléchargements de cette version](https://github.com/axyrios/glpi-agent-deployment-releases/releases/tag/v1.0.3). Les lanceurs avec clés sont remis séparément par un canal privé et ne doivent pas être publiés ici.
